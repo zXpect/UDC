@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Eventos - NetSchool UDC{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2>Eventos Institucionales</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    {% if events %}
+        {% for event in events %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">{{ event.title }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong><i class="far fa-calendar-alt me-2"></i>Fecha:</strong> {{ event.date }}<br>
+                            <strong><i class="far fa-clock me-2"></i>Hora:</strong> {{ event.time }}<br>
+                            <strong><i class="fas fa-map-marker-alt me-2"></i>Ubicación:</strong> {{ event.location }}
+                        </p>
+                        <p class="card-text">{{ event.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info">
+                No hay eventos programados en este momento.
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

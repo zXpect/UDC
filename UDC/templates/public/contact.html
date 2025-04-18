@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto - NetSchool UDC{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2>Contacto</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Información de Contacto</h3>
+                <p><i class="fas fa-map-marker-alt me-2"></i><strong>Dirección:</strong><br>
+                   Calle Principal #123, Ciudad</p>
+                <p><i class="fas fa-phone me-2"></i><strong>Teléfono:</strong><br>
+                   (123) 456-7890</p>
+                <p><i class="fas fa-envelope me-2"></i><strong>Email:</strong><br>
+                   contacto@colegioudc.edu.co</p>
+                <p><i class="fas fa-clock me-2"></i><strong>Horario de Atención:</strong><br>
+                   Lunes a Viernes: 7:00 AM - 5:00 PM<br>
+                   Sábados: 8:00 AM - 12:00 PM</p>
+                
+                <h3 class="card-title mt-4">Redes Sociales</h3>
+                <div class="d-flex mt-3">
+                    <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-facebook-f me-2"></i>Facebook</a>
+                    <a href="#" class="btn btn-outline-info me-2"><i class="fab fa-twitter me-2"></i>Twitter</a>
+                    <a href="#" class="btn btn-outline-danger"><i class="fab fa-instagram me-2"></i>Instagram</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Envíanos un Mensaje</h3>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Asunto</label>
+                        <input type="text" class="form-control" id="subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Ubicación</h3>
+                <div class="ratio ratio-16x9">
+                    <!-- Aquí iría un mapa embebido real, pero por ahora usamos un placeholder -->
+                    <div class
