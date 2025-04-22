@@ -29,13 +29,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Eventos</a>
+                
+                    <a class="nav-link" href="{{ url_for('public.events') }}">Eventos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Nosotros</a>
+                    <a class="nav-link" href="{{ url_for('public.about') }}">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
+                    <a class="nav-link" href="{{ url_for('public.contact') }}">Contacto</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
