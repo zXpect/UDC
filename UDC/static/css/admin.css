@@ -1,0 +1,216 @@
+/* Estilos específicos para el panel de administración */
+
+:root {
+    --admin-primary: #007B3E;
+    --admin-secondary: #4CAF50;
+    --admin-accent: #00C853;
+    --admin-light: #E8F5E9;
+    --admin-hover: #009E35;
+    --admin-dark: #005D2F;
+    --admin-gray: #f8f9fa;
+    --admin-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo para el sidebar */
+  .list-group-item {
+    border-radius: 0;
+    border: none;
+    padding: 12px 20px;
+    margin-bottom: 3px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .list-group-item:hover {
+    background-color: var(--admin-light);
+    color: var(--admin-primary);
+    padding-left: 25px;
+  }
+  
+  .list-group-item.active {
+    background-color: var(--admin-primary);
+    color: white;
+  }
+  
+  .list-group-item.active:hover {
+    background-color: var(--admin-hover);
+  }
+  
+  .list-group-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--admin-accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .list-group-item:hover::before {
+    transform: scaleY(1);
+  }
+  
+  .list-group-item.active::before {
+    transform: scaleY(1);
+    width: 5px;
+  }
+  
+  .list-group-item i {
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .list-group-item:hover i {
+    transform: scale(1.2);
+  }
+  
+  /* Tarjetas de estadísticas */
+  .card.bg-primary, .card.bg-success, .card.bg-info {
+    background: linear-gradient(45deg, var(--admin-primary), var(--admin-secondary)) !important;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--admin-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .card.bg-success {
+    background: linear-gradient(45deg, var(--admin-secondary), var(--admin-accent)) !important;
+  }
+  
+  .card.bg-info {
+    background: linear-gradient(45deg, #00ACC1, #26C6DA) !important;
+  }
+  
+  .card.bg-primary:hover, .card.bg-success:hover, .card.bg-info:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Animación para los íconos en tarjetas */
+  .card .fa-3x {
+    transition: all 0.5s ease;
+    opacity: 0.8;
+  }
+  
+  .card:hover .fa-3x {
+    transform: rotate(15deg) scale(1.2);
+    opacity: 1;
+  }
+  
+  /* Estilos para tablas */
+  .table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--admin-shadow);
+  }
+  
+  .table thead th {
+    background-color: var(--admin-light);
+    color: var(--admin-dark);
+    font-weight: 600;
+    border: none;
+    padding: 15px;
+  }
+  
+  .table tbody tr {
+    transition: all 0.3s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: rgba(0, 123, 62, 0.05);
+    transform: translateX(5px);
+  }
+  
+  .table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+  }
+  
+  /* Botones de acción en tablas */
+  .btn-sm {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-sm:hover {
+    transform: scale(1.2);
+  }
+  
+  .btn-danger {
+    background-color: #f44336;
+    border-color: #f44336;
+  }
+  
+  .btn-danger:hover {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+  }
+  
+  /* Formularios */
+  .form-control {
+    border-radius: 5px;
+    border: 1px solid rgba(0, 123, 62, 0.2);
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 62, 0.25);
+  }
+  
+  textarea.form-control {
+    min-height: 120px;
+  }
+  
+  /* Animaciones para el panel de administración */
+  .admin-animate-in {
+    animation: fadeInRight 0.5s ease forwards;
+  }
+  
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
+    .list-group {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .list-group-item {
+      flex: 1 0 auto;
+      text-align: center;
+      margin-right: 3px;
+      margin-bottom: 3px;
+    }
+    
+    .list-group-item i {
+      display: block;
+      margin: 0 auto 5px auto;
+      font-size: 1.5rem;
+    }
+  }

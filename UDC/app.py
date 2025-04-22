@@ -9,9 +9,9 @@ app.config.from_object(Config)
 
 # Registrar blueprints
 app.register_blueprint(public, url_prefix='/public')
-app.register_blueprint(auth,rl_prefix='/auth')
+app.register_blueprint(auth,url_prefix='/auth')
 app.register_blueprint(admin, url_prefix='/admin')
-admin = Blueprint('admin', __name__)
+
 
 @app.route('/')
 def home():
@@ -29,4 +29,5 @@ def internal_server_error(e):
     return render_template('errors/500.html'), 500
 
 if __name__ == '__main__':
+    
     app.run(debug=True)
