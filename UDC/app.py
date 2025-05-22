@@ -4,9 +4,12 @@ from config import Config
 from routes.public import public  
 from routes.auth import auth  
 from routes.admin import admin  
+from dotenv import load_dotenv
+
   
 app = Flask(__name__)  
 app.config.from_object(Config)  
+load_dotenv()
   
 # Configurar sesiones  
 Session(app)  
