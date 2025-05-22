@@ -59,7 +59,6 @@ class Event:
             return result.deleted_count > 0  
         except:  
             return False  
-  
 class User:  
     collection = db.users  
       
@@ -68,19 +67,33 @@ class User:
         return User.collection.find_one({'username': username})  
       
     @staticmethod  
-    def create_user(username, password, role):  
+    def create_user(username, password, role='student'):  
+        # Validar que el usuario no exista  
+        if User.find_by_username(username):  
+            raise ValueError("Usuario ya existe")  
+          
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  
         user = {  
             'username': username,  
             'password': hashed_password,  
             'role': role,  
-            'created_at': datetime.datetime.utcnow()  
+            'created_at': datetime.datetime.utcnow(),  
+            'active': True  
         }  
-        return User.collection.insert_one(user)  
+        result = User.collection.insert_one(user)  
+        return result.inserted_id  
       
     @staticmethod  
     def verify_password(username, password):  
         user = User.find_by_username(username)  
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):  
+        if user and user.get('active', True) and bcrypt.checkpw(password.encode('utf-8'), user['password']):  
             return user  
-        return None
+        return None  
+      
+    @staticmethod  
+    def get_all_users():  
+        return list(User.collection.find({'active': True}))  
+      
+    @staticmethod  
+    def count_users():  
+        return User.collection.count_documents({'active': True})

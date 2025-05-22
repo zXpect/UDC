@@ -1,0 +1,58 @@
+{% extends 'base.html' %}  
+  
+{% block title %}Mi Perfil - NetSchool UDC{% endblock %}  
+  
+{% block content %}  
+<div class="row justify-content-center">  
+    <div class="col-md-8">  
+        <div class="card">  
+            <div class="card-header bg-primary text-white">  
+                <h4 class="mb-0">  
+                    <i class="fas fa-user-circle me-2"></i>Resumen del Perfil  
+                </h4>  
+            </div>  
+            <div class="card-body">  
+                <div class="row">  
+                    <div class="col-md-6">  
+                        <h5>Información Personal</h5>  
+                        <table class="table table-borderless">  
+                            <tr>  
+                                <td><strong>Usuario:</strong></td>  
+                                <td>{{ user.username }}</td>  
+                            </tr>  
+                            <tr>  
+                                <td><strong>Rol:</strong></td>  
+                                <td>  
+                                    <span class="badge bg-{{ 'danger' if user.role == 'admin' else 'primary' if user.role == 'teacher' else 'success' }}">  
+                                        {{ user.role.title() }}  
+                                    </span>  
+                                </td>  
+                            </tr>  
+                            <tr>  
+                                <td><strong>ID de Usuario:</strong></td>  
+                                <td>{{ user.user_id }}</td>  
+                            </tr>  
+                        </table>  
+                    </div>  
+                    <div class="col-md-6">  
+                        <h5>Acciones Rápidas</h5>  
+                        <div class="d-grid gap-2">  
+                            {% if user.role == 'admin' %}  
+                                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-primary">  
+                                    <i class="fas fa-user-shield me-2"></i>Panel de Administración  
+                                </a>  
+                            {% endif %}  
+                            <a href="{{ url_for('public.events') }}" class="btn btn-outline-secondary">  
+                                <i class="fas fa-calendar-alt me-2"></i>Ver Eventos  
+                            </a>  
+                            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">  
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión  
+                            </a>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+{% endblock %}

@@ -1,2 +1,3 @@
 .qodo
+# Variables de entorno sensibles
 .env

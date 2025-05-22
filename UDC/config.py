@@ -1,9 +1,9 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
-    MONGODB_URI = os.environ.get('MONGODB_URI') or 'mongodb://localhost:27017/myapp'
-    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY') or 'your-google-maps-api-key'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    MONGODB_URI = os.environ.get('MONGODB_URI')
+    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
     SESSION_TYPE = 'filesystem'  
     SESSION_PERMANENT = False
 

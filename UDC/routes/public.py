@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template  
 from models import Event  
 from config import Config  
+from dotenv import load_dotenv
+load_dotenv()
   
 public = Blueprint('public', __name__)  
   

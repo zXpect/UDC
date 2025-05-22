@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash  
 from models import Event  
 from routes.auth import admin_required  
+from models import User
   
 admin = Blueprint('admin', __name__)  
   
@@ -8,7 +9,16 @@ admin = Blueprint('admin', __name__)
 @admin_required  
 def dashboard():  
     events = Event.find_all()  
-    return render_template('admin/dashboard.html', events=events)  
+    users_count = User.count_users()  
+    events_count = len(events)  
+      
+    stats = {  
+        'events_count': events_count,  
+        'users_count': users_count,  
+        'files_count': 5  # Placeholder por ahora  
+    }  
+      
+    return render_template('admin/dashboard.html', events=events, stats=stats)
   
 @admin.route('/events')  
 @admin_required  
