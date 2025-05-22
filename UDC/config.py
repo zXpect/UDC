@@ -19,4 +19,4 @@ class ProductionConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    MONGODB_URI = 'mongodb://localhost:27017/test_myapp'
+    MONGODB_URI = 'mongodb://localhost:5000/test_myapp'

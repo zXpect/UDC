@@ -3,10 +3,12 @@ from config import Config
 import datetime  
 from bson import ObjectId  
 import bcrypt  
-  
+import re
+from typing import Optional, Dict, Any
+
 client = MongoClient(Config.MONGODB_URI)  
 db = client.udc_netschool  
-  
+
 class Event:  
     collection = db.events  
       
@@ -58,42 +60,173 @@ class Event:
             result = Event.collection.delete_one({'_id': ObjectId(event_id)})  
             return result.deleted_count > 0  
         except:  
-            return False  
+            return False
+
 class User:  
     collection = db.users  
       
     @staticmethod  
     def find_by_username(username):  
         return User.collection.find_one({'username': username})  
+    
+    @staticmethod
+    def find_by_email(email):
+        return User.collection.find_one({'email': email})
+    
+    @staticmethod
+    def find_by_id(user_id):
+        try:
+            return User.collection.find_one({'_id': ObjectId(user_id)})
+        except:
+            return None
+    
+    @staticmethod
+    def validate_email(email):
+        """Validar formato de email"""
+        pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+        return re.match(pattern, email) is not None
+    
+    @staticmethod
+    def validate_username(username):
+        """Validar formato de username"""
+        # Solo letras, números y guiones bajos, entre 4 y 20 caracteres
+        pattern = r'^[a-zA-Z0-9_]{4,20}$'
+        return re.match(pattern, username) is not None
+    
+    @staticmethod
+    def validate_password(password):
+        """Validar que la contraseña cumpla los requisitos"""
+        if len(password) < 8:
+            return False, "La contraseña debe tener al menos 8 caracteres"
+        
+        if not re.search(r'[A-Z]', password):
+            return False, "La contraseña debe contener al menos una letra mayúscula"
+        
+        if not re.search(r'[a-z]', password):
+            return False, "La contraseña debe contener al menos una letra minúscula"
+        
+        if not re.search(r'\d', password):
+            return False, "La contraseña debe contener al menos un número"
+        
+        return True, "Contraseña válida"
+    
+    @staticmethod
+    def validate_name(name):
+        """Validar formato de nombre/apellido"""
+        if len(name) < 2:
+            return False, "Debe tener al menos 2 caracteres"
+        
+        # Solo letras, espacios y caracteres especiales del español
+        pattern = r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$'
+        if not re.match(pattern, name):
+            return False, "Solo se permiten letras y espacios"
+        
+        return True, "Nombre válido"
       
     @staticmethod  
-    def create_user(username, password, role='student'):  
-        # Validar que el usuario no exista  
+    def create_user(username, password, email=None, first_name=None, last_name=None, role='student', **kwargs):  
+        """
+        Crear un nuevo usuario con validaciones básicas
+        """
+        
+        # Validaciones básicas
         if User.find_by_username(username):  
-            raise ValueError("Usuario ya existe")  
-          
+            raise ValueError("El nombre de usuario ya existe")
+        
+        if email and User.find_by_email(email):
+            raise ValueError("El correo electrónico ya está registrado")
+        
+        # Hash de la contraseña
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  
+        
+        # Crear documento de usuario
         user = {  
-            'username': username,  
-            'password': hashed_password,  
-            'role': role,  
-            'created_at': datetime.datetime.utcnow(),  
-            'active': True  
+            # Campos obligatorios
+            'username': username.lower().strip(),
+            'password': hashed_password,
+            'role': role,
+            
+            # Campos opcionales
+            'email': email.lower().strip() if email else '',
+            'first_name': first_name.strip() if first_name else '',
+            'last_name': last_name.strip() if last_name else '',
+            
+            # Metadatos del sistema
+            'created_at': datetime.datetime.utcnow(),
+            'updated_at': datetime.datetime.utcnow(),
+            'active': True,
         }  
+        
         result = User.collection.insert_one(user)  
         return result.inserted_id  
+    
+    @staticmethod
+    def update_user(user_id, update_data):
+        """
+        Actualizar información del usuario
+        """
+        try:
+            # Agregar timestamp de actualización
+            update_data['updated_at'] = datetime.datetime.utcnow()
+            
+            result = User.collection.update_one(
+                {'_id': ObjectId(user_id)},
+                {'$set': update_data}
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            print(f"Error updating user: {e}")
+            return False
       
     @staticmethod  
     def verify_password(username, password):  
-        user = User.find_by_username(username)  
-        if user and user.get('active', True) and bcrypt.checkpw(password.encode('utf-8'), user['password']):  
+        """
+        Verificar credenciales de usuario
+        
+        Args:
+            username (str): Nombre de usuario o email
+            password (str): Contraseña
+            
+        Returns:
+            dict|None: Datos del usuario si las credenciales son válidas
+        """
+        # Buscar por username o email
+        user = User.find_by_username(username)
+        if not user:
+            user = User.find_by_email(username)
+        
+        if user and user.get('active', True) and bcrypt.checkpw(password.encode('utf-8'), user['password']):
             return user  
         return None  
       
     @staticmethod  
     def get_all_users():  
+        """Obtener todos los usuarios activos"""
         return list(User.collection.find({'active': True}))  
       
     @staticmethod  
     def count_users():  
+        """Contar usuarios activos"""
         return User.collection.count_documents({'active': True})
+
+# Clase para manejar notificaciones de usuarios
+class UserNotification:
+    collection = db.user_notifications
+    
+    @staticmethod
+    def create_notification(user_id, title, message, notification_type='info', data=None):
+        """
+        Crear una nueva notificación para un usuario
+        """
+        notification = {
+            'user_id': ObjectId(user_id),
+            'title': title,
+            'message': message,
+            'type': notification_type,
+            'data': data or {},
+            'read': False,
+            'created_at': datetime.datetime.utcnow(),
+        }
+        
+        result = UserNotification.collection.insert_one(notification)
+        return result.inserted_id
