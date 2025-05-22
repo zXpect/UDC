@@ -69,10 +69,10 @@
                                         <td>{{ event.time }}</td>
                                         <td>{{ event.location }}</td>
                                         <td>
-                                            <a href="{{ url_for('admin.edit_event', event_id=event.id) }}" class="btn btn-sm btn-primary">
+                                            <a href="{{ url_for('admin.edit_event', event_id=event._id) }}" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="#" class="btn btn-sm btn-danger delete-event" data-id="{{ event.id }}">
+                                            <a href="{{ url_for('admin.delete_event', event_id=event._id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este evento?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>

@@ -65,19 +65,54 @@
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">Ubicación</h3>
-                <div class="ratio ratio-16x9">
-                    <!-- Aquí iría un mapa embebido real, pero por ahora usamos un placeholder -->
-                    <div class="bg-light d-flex align-items-center justify-content-center">
-                        <p class="text-muted">Mapa de ubicación de la institución</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="row mt-4">  
+    <div class="col-12">  
+        <div class="card">  
+            <div class="card-body">  
+                <h3 class="card-title">Ubicación</h3>  
+                <div class="ratio ratio-16x9">  
+                    <div id="map" style="width: 100%; height: 100%;"></div>  
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</div>  
+{% endblock %}  
+  
+{% block extra_js %}  
+<script>  
+function initMap() {  
+    const location = { lat: 5.309346, lng: -73.8177795 };  
+      
+    const map = new google.maps.Map(document.getElementById("map"), {  
+        zoom: 15,  
+        center: location,  
+        mapTypeId: google.maps.MapTypeId.ROADMAP  
+    });  
+      
+    const marker = new google.maps.Marker({  
+        position: location,  
+        map: map,  
+        title: "Colegio UDC",  
+        animation: google.maps.Animation.DROP  
+    });  
+      
+    const infoWindow = new google.maps.InfoWindow({  
+        content: `  
+            <div>  
+                <h6>Colegio UDC</h6>  
+                <p>Calle Principal #123<br>  
+                Teléfono: (123) 456-7890</p>  
+            </div>  
+        `  
+    });  
+      
+    marker.addListener("click", () => {  
+        infoWindow.open(map, marker);  
+    });  
+}  
+</script>  
+<script async defer   
+    src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap">  
+</script>  
 {% endblock %}
