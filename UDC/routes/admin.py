@@ -1,52 +1,67 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from models import Event
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
-# Datos temporales para simular eventos
-temp_events = [
-    {
-        'id': 1,
-        'title': 'Reunión de Padres',
-        'date': '2025-05-15',
-        'time': '18:00',
-        'location': 'Auditorio Principal',
-        'description': 'Reunión informativa para padres de familia.'
-    },
-    {
-        'id': 2,
-        'title': 'Día del Maestro',
-        'date': '2025-05-20',
-        'time': '10:00',
-        'location': 'Patio Central',
-        'description': 'Celebración por el día del maestro.'
-    }
-]
-
 @admin.route('/')
 def dashboard():
-    return render_template('admin/dashboard.html', events=temp_events)
+    events = Event.find_all()
+    return render_template('admin/dashboard.html', events=events)
 
 @admin.route('/events')
 def events():
-    return render_template('admin/events.html', events=temp_events)
+    events = Event.find_all()
+    return render_template('admin/events.html', events=events)
 
 @admin.route('/events/add', methods=['GET', 'POST'])
 def add_event():
     if request.method == 'POST':
-        # Aquí se procesaría el formulario (simulado por ahora)
-        return redirect(url_for('admin.events'))
+        try:
+            Event.create(
+                title=request.form.get('title'),
+                date=request.form.get('date'),
+                time=request.form.get('time'),
+                location=request.form.get('location'),
+                description=request.form.get('description')
+            )
+            flash('Evento creado exitosamente', 'success')
+            return redirect(url_for('admin.events'))
+        except Exception as e:
+            flash('Error al crear el evento', 'error')
+    
     return render_template('admin/event_form.html')
 
 @admin.route('/events/edit/<int:event_id>', methods=['GET', 'POST'])
 def edit_event(event_id):
-    # Simulación de obtención de evento por ID
-    event = next((e for e in temp_events if e['id'] == event_id), None)
+    event = Event.find_by_id(event_id)
     
     if not event:
+        flash('Evento no encontrado', 'error')
         return redirect(url_for('admin.events'))
     
     if request.method == 'POST':
-        # Aquí se procesaría el formulario (simulado por ahora)
-        return redirect(url_for('admin.events'))
+        try:
+            Event.update(
+                event_id,
+                title=request.form.get('title'),
+                date=request.form.get('date'),
+                time=request.form.get('time'),
+                location=request.form.get('location'),
+                description=request.form.get('description')
+            )
+            flash('Evento actualizado exitosamente', 'success')
+            return redirect(url_for('admin.events'))
+        except Exception as e:
+            flash('Error al actualizar el evento', 'error')
     
     return render_template('admin/event_form.html', event=event)
+
+@admin.route('/events/delete/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+    try:
+        Event.delete(event_id)
+        flash('Evento eliminado exitosamente', 'success')
+    except Exception as e:
+        flash('Error al eliminar el evento', 'error')
+    
+    return redirect(url_for('admin.events'))

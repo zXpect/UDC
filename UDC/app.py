@@ -3,9 +3,11 @@ from config import Config
 from routes.public import public
 from routes.auth import auth
 from routes.admin import admin
+from flask import session  
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.secret_key = app.config['SECRET_KEY']
 
 # Registrar blueprints
 app.register_blueprint(public, url_prefix='/public')
